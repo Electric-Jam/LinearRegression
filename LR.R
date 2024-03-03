@@ -30,10 +30,10 @@ args <- parse_args(p)
 print(args)
 
 # #test
-# args = NULL
-# args$bfile = '/home/parkej95/LinearRegression/ps2_admixture.pruned'
-# args$pheno = '/home/parkej95/LinearRegression/test_pheno.pheno'
-# args$covar = '/home/parkej95/LinearRegression/test_pheno.covar'
+args = NULL
+args$bfile = '/home/parkej95/CSE_284_Sim/simulate.100'
+args$pheno = '/home/parkej95/CSE284_phenotype/100_samples/100_samples_set_1.pheno'
+args$covar = '/home/parkej95/CSE_284_Sim/simulate.100.eigenvec'
 
 
 # Read in the genotype file
@@ -41,6 +41,7 @@ plinkObj = openPlink(args$bfile)
 sampleIndex = 1:length(plinkObj$fam$V1)
 markerIndex = 1:length(plinkObj$bim$V2)
 geno = readPlinkToMatrixByIndex(args$bfile, sampleIndex, markerIndex)
+geno = 2 - geno
 
 
 # Read in the phenotype file
@@ -51,7 +52,8 @@ if (is.null(args$covar)) {
     pheno_covar = pheno
 } else {
     covar = fread(args$covar)
-    covar = covar[, -c('IID')]
+    covar = covar[, -c('V1', 'V2')]
+    colnames(covar) = c('PC1', 'PC2', 'PC3', 'PC4')
     pheno_covar = cbind(pheno, covar)
 }
 
@@ -64,7 +66,7 @@ if (is.null(args$covar)) {
 # P: the p-value
 
 pheno_covar = pheno_covar[, -c('IID')]
-betas = c() ; ses = c() ; ps = c()
+snps = c() ; betas = c() ; ses = c() ; ps = c()
 for(i in 1:ncol(geno)){
     if (i %% 1000 == 0) {
         cat('Analyzing SNP', i, '\n')
@@ -76,15 +78,21 @@ for(i in 1:ncol(geno)){
     model = lm(Y ~ ., data = df)
 
     # Extract the beta, se, and p-value
-    beta = summary(model)$coefficients[paste0('`', markerid, '`'), 'Estimate']
-    se = summary(model)$coefficients[paste0('`', markerid, '`'),  'Std. Error']
-    p = summary(model)$coefficients[paste0('`', markerid, '`'), 'Pr(>|t|)']
 
-    betas = c(betas, beta)
-    ses = c(ses, se)
-    ps = c(ps, p)
+    if(paste0('`', markerid, '`') %in% rownames(summary(model)$coefficients)){
+        beta = summary(model)$coefficients[paste0('`', markerid, '`'), 'Estimate']
+        se = summary(model)$coefficients[paste0('`', markerid, '`'),  'Std. Error']
+        p = summary(model)$coefficients[paste0('`', markerid, '`'), 'Pr(>|t|)']
+
+        snps = c(snps, markerid)
+        betas = c(betas, beta)
+        ses = c(ses, se)
+        ps = c(ps, p)
+
+    }
+
 }
 
 #create output file
-output = data.frame(SNP = colnames(geno), BETA = betas, SE = ses, P = ps)
+output = data.frame(SNP = snps, BETA = betas, SE = ses, P = ps)
 write.table(output, file = paste0(args$out, '.lr'), quote = FALSE, row.names = FALSE, col.names = TRUE)

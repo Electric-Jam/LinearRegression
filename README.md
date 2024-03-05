@@ -18,5 +18,9 @@
 
 ## Command Line Usage
 ```
-Rscript LR.R --bfile /home/parkej95/CSE_284_Sim/simulate.100 --pheno /home/parkej95/CSE284_phenotype/100_samples/100_samples_set_1.pheno --covar /home/parkej95/CSE_284_Sim/simulate.100.eigenvec --out test
+Rscript /home/eup009/cse284/LinearRegression/LR.R \
+        --bfile /home/eup009/cse284/CSE_284_Sim/simulate.${sample_1} \
+        --covar /home/eup009/cse284/CSE_284_Sim/simulate.${sample_1}.eigenvec \
+        --pheno /home/eup009/cse284/CSE284_phenotype/${sample}_samples/${sample}_samples_set_${seed}.pheno \
+        --out /home/eup009/cse284/output/${sample}/LM_res_seed${seed}
 ```

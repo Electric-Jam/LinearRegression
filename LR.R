@@ -30,10 +30,10 @@ args <- parse_args(p)
 print(args)
 
 # #test
-args = NULL
-args$bfile = '/home/parkej95/CSE_284_Sim/simulate.100'
-args$pheno = '/home/parkej95/CSE284_phenotype/100_samples/100_samples_set_1.pheno'
-args$covar = '/home/parkej95/CSE_284_Sim/simulate.100.eigenvec'
+# args = NULL
+# args$bfile = '/home/parkej95/CSE_284_Sim/simulate.100'
+# args$pheno = '/home/parkej95/CSE284_phenotype/100_samples/100_samples_set_1.pheno'
+# args$covar = '/home/parkej95/CSE_284_Sim/simulate.100.eigenvec'
 
 
 # Read in the genotype file
@@ -48,7 +48,7 @@ geno = 2 - geno
 pheno = fread(args$pheno)
 
 # Read in the covariate file
-if (is.null(args$covar)) {
+if (is.na(args$covar)) {
     pheno_covar = pheno
 } else {
     covar = fread(args$covar)

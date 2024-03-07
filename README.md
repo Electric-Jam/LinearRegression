@@ -4,7 +4,7 @@ errors by LMMs and LMs. By systematically comparing the Type I and Type II error
 models, this project aims to illuminate their statistical efficacy and robustness.
 
 
-# Genotype simulation
+# 1. Genotype simulation
 Since the genotype data is not available, we will simulate the genotype data using `plink` software. The genotype data will be simulated for 100, 1k, 10k samples and linkage equlibrium 10k SNPs. The genotype data will be simulated using the following command:
 
 ```
@@ -17,7 +17,7 @@ Genetic PCA was performed to generate the covariate file for the linear regressi
 bash generate_pcs.sh $BASEDIR
 ```
 
-# Phenotype simulation
+# 2. Phenotype simulation
 Two different sets of phenotypes were generated for each sample size. The first set of phenotypes was generated for type 1 error evaluation and the second set of phenotypes was generated for type 2 error evaluation.
 
 ## Null phenotype generation
@@ -46,7 +46,7 @@ The second set of phenotypes was generated for type 2 error evaluation using the
 
 ```
 
-# Simple Linear Regression for GWAS
+# 3. Simple Linear Regression for GWAS
 The simple linear regression model is implemented in the attached `LR.R` file. The file is implemented using the following dependencies
 
 ## Dependencies (built with R4.3.1)
@@ -73,7 +73,7 @@ Rscript /home/eup009/cse284/LinearRegression/LR.R \
         --out /home/eup009/cse284/output/100/LM_res_seed$1
 ```
 
-# Linear Mixed Model for GWAS (EMMAX)
+# 4. Linear Mixed Model for GWAS (EMMAX)
 To test the Linear Mixed Model, we used the EMMAX software. EMMAX is a mixed model association test that accounts for population structure and relatedness. EMMAX uses a linear mixed model to account for the relatedness between individuals. The EMMAX software was used to compute the association study across all simulated phenotypes. 
 
 ## Download & Installation of EMMAX
@@ -91,8 +91,7 @@ bash run_association.sh $BASEDIR $PHENOBASE $OUTBASE $EMMAX_KIN_PATH $EMMAX_PATH
 ```
 
 
-
-# Type I error Evaluation
+# 5. Type I error Evaluation
 The type I error evaluation was performed by the False Positive Rate (FPR) of the linear regression model and the linear mixed model. Furthermore, the p-value distribution was plotted in a qqplot to visualize the inflation of the p-values. qqplot was generated using the `plot_res.R` script.
 
 ```
@@ -100,9 +99,9 @@ Rscript plot_res.R
 Rscript plot_res_emmax.R
 ```
 
-# Type II Evaluation
+# 6. Type II Evaluation
 
-# Computational Cost Evaluation
+# 7. Computational Cost Evaluation
 
 
 # Conclusion

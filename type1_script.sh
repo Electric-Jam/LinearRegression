@@ -25,9 +25,8 @@ do
     for seed in {1..100}
     do
         /usr/bin/time Rscript /home/eup009/cse284/LinearRegression/LR.R \
-        --bfile /home/eup009/cse284/CSE_284_Sim/simulate.${sample_1} \
-        --covar /home/eup009/cse284/CSE_284_Sim/simulate.${sample_1}.eigenvec \
-        --pheno /home/eup009/cse284/CSE284_phenotype/${sample}_samples/${sample}_samples_set_${seed}.pheno \
+        --bfile /home/eup009/cse284/${sample_1}_test \
+        --pheno /home/eup009/cse284/CSE284_phenotype_1/${sample}_samples/${sample}_samples_set_${seed}.pheno \
         --out /home/eup009/cse284/output/${sample}/LM_res_seed${seed} \
         > /home/eup009/cse284/logs/${sample}/LM_res_seed${seed}.log 2>&1 &
 

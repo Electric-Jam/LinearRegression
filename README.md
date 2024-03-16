@@ -18,10 +18,13 @@ bash generate_pcs.sh $BASEDIR
 ```
 
 # 2. Phenotype simulation
-Two different sets of phenotypes were generated for each sample size. The first set of phenotypes was generated for type 1 error evaluation and the second set of phenotypes was generated for type 2 error evaluation.
+Two different sets of phenotypes were generated for each sample size. The first set of phenotypes was generated for type 1 error evaluation and the second set of phenotypes was generated for type 2 error evaluation. All phenotypes were generated using the following command:
+```
+bash phenotype_generation.sh
+```
 
 ## Null phenotype generation
-100 null phenotypes for type 1 error evaluation were generated using `phenotype_generation.R` script.
+100 null phenotypes for type 1 error evaluation were generated using `phenotype_generation_1.R` script.
 
 ### Dependencies
 -`argparser`
@@ -32,19 +35,26 @@ Two different sets of phenotypes were generated for each sample size. The first 
 -`n_phenotypes` : number of phenotypes to generate
 -`out` : output file prefix
 
-The script was run using the following command:
-
-```
-bash phenotype_generation.sh
-```
 
 ## Causal phenotype generation
+100 causal phenotypes for type 2 error evaluation were generated using `phenotype_generation_2.R` script.
 
-The second set of phenotypes was generated for type 2 error evaluation using the following command:
+### Dependencies
+-`argparser`
+-`data.table`
+-`seqminer`
 
-```bash
+### Inputs
+-`bfile` : plink binary bed file
+-`n_phenotypes` : number of phenotypes to generate
+-`n_negative_causal_variants` : number of causal variants to generate
+-`n_positive_causal_variants` : number of causal variants to generate
+-`negative_beta_min` : range of beta values
+-`negative_beta_max` : range of beta values
+-`positive_beta_min` : range of beta values
+-`positive_beta_max` : range of beta values
+-`out` : output file prefix
 
-```
 
 # 3. Simple Linear Regression for GWAS
 The simple linear regression model is implemented in the attached `LR.R` file. The file is implemented using the following dependencies
@@ -95,13 +105,14 @@ bash run_association.sh $BASEDIR $PHENOBASE $OUTBASE $EMMAX_KIN_PATH $EMMAX_PATH
 The type I error evaluation was performed by the False Positive Rate (FPR) of the linear regression model and the linear mixed model. Furthermore, the p-value distribution was plotted in a qqplot to visualize the inflation of the p-values. qqplot was generated using the `plot_res.R` script.
 
 ```
-Rscript plot_res.R
-Rscript plot_res_emmax.R
+bash type1_script.sh $BASEDIR $PHENOBASE $OUTBASE ./
+Rscript plot_res_LR.R $OUTBASE/output $OUTBASE/plots
+Rscript plot_res_emmax.R $OUTBASE/output $OUTBASE/plots
 ```
 
 # 6. Type II Evaluation
 
-# 7. Computational Cost Evaluation
-
-
-# Conclusion
+```
+bash type2_script.sh $BASEDIR $PHENOBASE $OUTBASE ./
+Rscript plot_power.R $OUTBASE/output $OUTBASE/plots
+```

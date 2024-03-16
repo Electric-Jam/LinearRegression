@@ -1,5 +1,11 @@
 library(data.table)
 
+args = commandArgs(trailingOnly=TRUE)
+
+if (length(args)<2) {
+       stop("Script requires 2 arguments (inputdir outdir)")
+}
+
 sample = c(100, 1000, 10000)
 power_LR = c()
 power_LMM = c()
@@ -12,10 +18,10 @@ for (s in c('100', '1k', '10k')){
     res_LR = c()
     res_LMM = c()
     for (i in 1:100){
-        tmp_LR = fread(paste0('/home/eup009/cse284/output/', s, '_type2/LM_res_seed', i, '.lr'))
+        tmp_LR = fread(paste0(args[1], s, '_type2/LM_res_seed', i, '.lr'))
         res_LR <- c(res_LR, tmp_LR$P)
 
-        tmp_LMM = fread(paste0('/home/eup009/cse284/output_emmax/', s, '_emmax_type2/LM_res_seed', i, '.ps'))
+        tmp_LMM = fread(paste0(args[1], s, '_emmax_type2/LM_res_seed', i, '.ps'))
         res_LMM <- c(res_LMM, tmp_LMM$V4)
     }
 

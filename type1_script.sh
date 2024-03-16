@@ -1,3 +1,10 @@
+#!/bin/sh
+
+basedir=$1
+phenobase=$2
+outbase=$3
+regpath=$4
+
 for sample in 100 1k 10k 
 do
     if [ "${sample}" == "100" ]; then
@@ -19,16 +26,17 @@ do
             pf=2
         fi
 
-    mkdir -p /home/eup009/cse284/logs/${sample}
-    mkdir -p /home/eup009/cse284/output/${sample}
+    mkdir -p $outbase/logs/${sample}
+    mkdir -p $outbase/output/${sample}
 
     for seed in {1..100}
     do
-        /usr/bin/time Rscript /home/eup009/cse284/LinearRegression/LR.R \
-        --bfile /home/eup009/cse284/${sample_1}_test \
-        --pheno /home/eup009/cse284/CSE284_phenotype_1/${sample}_samples/${sample}_samples_set_${seed}.pheno \
-        --out /home/eup009/cse284/output/${sample}/LM_res_seed${seed} \
-        > /home/eup009/cse284/logs/${sample}/LM_res_seed${seed}.log 2>&1 &
+        echo $outbase/output/${sample}/LM_res_seed${seed} 
+	Rscript $regpath/LR.R \
+        --bfile $basedir/simulate.$sample_1 \
+        --pheno $phenobase/${sample}_samples/${sample}_samples_set_${seed}.pheno \
+        --out $outbase/output/${sample}/LM_res_seed${seed} \
+        > $outbase/logs/${sample}/LM_res_seed${seed}.log 2>&1 &
 
         if (( seed % pf == 0 )); then
             wait

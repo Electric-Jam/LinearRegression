@@ -28,6 +28,7 @@ do
 
     mkdir -p $outbase/logs/${sample}
     mkdir -p $outbase/output/${sample}
+    mkdir -p $outbase/plots/${sample}
 
     for seed in {1..100}
     do
